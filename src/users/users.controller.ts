@@ -19,32 +19,35 @@ import { UpdateUsersDto } from './dto/update-users.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get()
-  getAll(): Promise<Users[]> {
-    return this.usersService.getAll();
+  async getAll(): Promise<Users[]> {
+    return await this.usersService.getAll();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): Promise<Users> {
-    return this.usersService.getById(id);
+  async getOne(@Param('id') id: string): Promise<Users> {
+    return await this.usersService.getById(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Cache-Control', 'none')
-  create(@Body() createUsersDto: CreateUsersDto): Promise<Users> {
-    return this.usersService.create(createUsersDto);
+  async create(@Body() createUsersDto: CreateUsersDto): Promise<string> {
+    await this.usersService.create(createUsersDto);
+    return 'User was created!';
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<Users> {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: string): Promise<string> {
+    await this.usersService.remove(id);
+    return 'User was deleted!';
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateUsersDto: UpdateUsersDto,
-  ): Promise<Users> {
-    return this.usersService.update(id, updateUsersDto);
+  ): Promise<string> {
+    await this.usersService.update(id, updateUsersDto);
+    return 'User was changed!';
   }
 }

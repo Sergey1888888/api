@@ -17,13 +17,13 @@ export class Users {
   email: string;
   @Prop({ String, required: true })
   password: string;
-  @Prop({ String, required: true })
+  @Prop({ String, required: false })
   telegram: string;
-  @Prop({ String, required: true })
+  @Prop({ String, required: false })
   vk: string;
-  @Prop({ String, required: true })
+  @Prop({ String, required: false })
   whatsup: string;
-  @Prop({ Boolean, required: true })
+  @Prop({ Boolean, required: false, default: false })
   isAdmin: boolean;
 }
 
