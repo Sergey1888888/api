@@ -8,8 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Users, UsersDocument } from './schemas/users.schema';
 import { Model, Types } from 'mongoose';
 import { UpdateUsersDto } from './dto/update-users.dto';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const bcrypt = require('bcrypt');
+import { hashPass } from '../helpers/passwordFunctions';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +17,10 @@ export class UsersService {
   ) {}
   async getAll(): Promise<Users[]> {
     return this.usersModel.find().exec();
+  }
+
+  async getByEmail(email: string): Promise<Users> {
+    return this.usersModel.findOne({ email: email });
   }
 
   async getById(id: string): Promise<Users> {
@@ -35,9 +38,7 @@ export class UsersService {
     ) {
       throw new ConflictException('Phone number already exist!');
     }
-    const hash = bcrypt.hashSync(usersDto.password, 10);
-    const newUser = { ...usersDto, password: hash };
-    const user = new this.usersModel(newUser);
+    const user = new this.usersModel(hashPass(usersDto, 10));
     return await user.save();
   }
 
@@ -53,9 +54,9 @@ export class UsersService {
       throw new NotFoundException('User does not exist!');
     }
     if (usersDto.password) {
-      const hash = bcrypt.hashSync(usersDto.password, 10);
-      const newUser = { ...usersDto, password: hash };
-      return this.usersModel.findByIdAndUpdate(id, newUser, { new: true });
+      return this.usersModel.findByIdAndUpdate(id, hashPass(usersDto, 10), {
+        new: true,
+      });
     }
     return this.usersModel.findByIdAndUpdate(id, usersDto, { new: true });
   }
