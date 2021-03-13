@@ -11,6 +11,8 @@ export class Users {
   surname: string;
   @Prop({ String, required: true })
   patronymic: string;
+  @Prop({ String, required: false, default: null })
+  avatar: string;
   @Prop({ String, required: true })
   phoneNumber: string;
   @Prop({ String, required: true })

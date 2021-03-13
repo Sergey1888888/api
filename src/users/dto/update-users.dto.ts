@@ -1,8 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsString, IsUrl } from 'class-validator';
 
 export class UpdateUsersDto {
   @IsString()
   readonly password: string;
+
+  @IsString()
+  avatar: string;
 
   @IsString()
   readonly telegram: string;

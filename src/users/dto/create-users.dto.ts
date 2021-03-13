@@ -3,7 +3,7 @@ import {
   IsEmail,
   IsMobilePhone,
   IsNotEmpty,
-  IsString,
+  IsString, IsUrl,
 } from 'class-validator';
 
 export class CreateUsersDto {
@@ -19,11 +19,10 @@ export class CreateUsersDto {
   @IsString()
   readonly patronymic: string;
 
-  @IsNotEmpty()
-  @IsMobilePhone()
   @IsString()
   readonly phoneNumber: string;
 
+  @IsNotEmpty()
   @IsEmail()
   @IsString()
   readonly email: string;
