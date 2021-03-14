@@ -42,7 +42,7 @@ export class Realty {
   bathroom: number;
   @Prop({ String, required: false, default: null })
   bathroomType: string;
-  @Prop({ Number, required: true })
+  @Prop({ Number, required: false, default: null })
   balconyNumber: number;
   @Prop({ Number, required: false, default: null })
   elevatorsNumber: number;
