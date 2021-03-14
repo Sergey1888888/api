@@ -19,7 +19,8 @@ export class UpdateRealtyDto {
   @IsString()
   street: string;
 
-  @IsNumberString()
+  @IsNotEmpty()
+  @IsString()
   houseNumber: string;
 
   @IsNumber()

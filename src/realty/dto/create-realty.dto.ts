@@ -24,7 +24,7 @@ export class CreateRealtyDto {
   readonly street: string;
 
   @IsNotEmpty()
-  @IsNumberString()
+  @IsString()
   readonly houseNumber: string;
 
   @IsNumberString()

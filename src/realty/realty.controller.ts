@@ -7,11 +7,16 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { RealtyService } from './realty.service';
 import { Realty } from './schemas/realty.schema';
 import { CreateRealtyDto } from './dto/create-realty.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateUsersDto } from '../users/dto/update-users.dto';
+import { UpdateRealtyDto } from './dto/update-realty.dto';
 
 @Controller('realty')
 export class RealtyController {
@@ -48,5 +53,14 @@ export class RealtyController {
   async create(@Body() createRealtyDto: CreateRealtyDto): Promise<string> {
     await this.realtyService.create(createRealtyDto);
     return 'Realty was created!';
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateRealtyDto: UpdateRealtyDto,
+  ): Promise<string> {
+    await this.realtyService.update(id, updateRealtyDto);
+    return 'Realty was changed!';
   }
 }

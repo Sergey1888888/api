@@ -84,15 +84,15 @@ export class UsersService {
     return this.usersModel.findByIdAndUpdate(id, updateImageDto, { new: true });
   }
 
-  async update(id: string, usersDto: UpdateUsersDto): Promise<Users> {
+  async update(id: string, updateUsersDto: UpdateUsersDto): Promise<Users> {
     if (!Types.ObjectId.isValid(id) || !(await this.usersModel.findById(id))) {
       throw new NotFoundException('User does not exist!');
     }
-    if (usersDto.password) {
-      return this.usersModel.findByIdAndUpdate(id, hashPass(usersDto, 10), {
+    if (updateUsersDto.password) {
+      return this.usersModel.findByIdAndUpdate(id, hashPass(updateUsersDto, 10), {
         new: true,
       });
     }
-    return this.usersModel.findByIdAndUpdate(id, usersDto, { new: true });
+    return this.usersModel.findByIdAndUpdate(id, updateUsersDto, { new: true });
   }
 }

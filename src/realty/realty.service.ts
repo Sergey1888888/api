@@ -8,6 +8,7 @@ import fetch from 'node-fetch';
 import { Realty, RealtyDocument } from './schemas/realty.schema';
 import { Model, Types } from 'mongoose';
 import { CreateRealtyDto } from './dto/create-realty.dto';
+import { UpdateRealtyDto } from './dto/update-realty.dto';
 
 @Injectable()
 export class RealtyService {
@@ -75,5 +76,14 @@ export class RealtyService {
     realtyDto.long = json[0].lon;
     const realty = new this.realtyModel(realtyDto);
     return realty.save();
+  }
+
+  async update(id: string, updateRealtyDto: UpdateRealtyDto): Promise<Realty> {
+    if (!Types.ObjectId.isValid(id) || !(await this.realtyModel.findById(id))) {
+      throw new NotFoundException('Realty does not exist!');
+    }
+    return this.realtyModel.findByIdAndUpdate(id, updateRealtyDto, {
+      new: true,
+    });
   }
 }

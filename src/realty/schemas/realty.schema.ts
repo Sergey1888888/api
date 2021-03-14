@@ -28,7 +28,7 @@ export class Realty {
   kitchenArea: number;
   @Prop({ Number, required: false, default: null })
   landArea: number;
-  @Prop({ Number, required: true })
+  @Prop({ Number, required: false, default: null })
   rooms: number;
   @Prop({ Number, required: false, default: null })
   floorsNumber: number;
