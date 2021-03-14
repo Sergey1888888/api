@@ -2,8 +2,7 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsNumber,
-  IsNumberString,
+  IsNumber, IsNumberString,
   IsString,
 } from 'class-validator';
 
@@ -23,7 +22,7 @@ export class UpdateRealtyDto {
   @IsString()
   houseNumber: string;
 
-  @IsNumber()
+  @IsNumberString()
   apartmentNumber: number;
 
   @IsNotEmpty()
