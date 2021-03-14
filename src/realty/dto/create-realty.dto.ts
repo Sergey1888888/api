@@ -46,6 +46,7 @@ export class CreateRealtyDto {
   @IsNumber()
   readonly rooms: number;
 
+  @IsString()
   readonly renovation: string;
 
   @IsNotEmpty()
