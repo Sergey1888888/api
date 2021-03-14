@@ -26,7 +26,6 @@ export class CreateRealtyDto {
   @IsNumberString()
   readonly houseNumber: string;
 
-  @IsNotEmpty()
   @IsNumber()
   readonly apartmentNumber: number;
 
@@ -37,6 +36,12 @@ export class CreateRealtyDto {
   @IsNotEmpty()
   @IsNumber()
   readonly area: number;
+
+  @IsNumber()
+  readonly liveArea: number;
+
+  @IsNumber()
+  readonly kitchenArea: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -52,11 +57,12 @@ export class CreateRealtyDto {
 
   readonly rating: number;
 
-  @IsNotEmpty()
   @IsNumber()
   readonly bathroom: number;
 
-  @IsNotEmpty()
+  @IsString()
+  readonly bathroomType: string;
+
   @IsNumber()
   readonly balconyNumber: number;
 

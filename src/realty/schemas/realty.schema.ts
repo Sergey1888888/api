@@ -38,7 +38,7 @@ export class Realty {
   price: number;
   @Prop({ Number, required: false, default: null })
   rating: number;
-  @Prop({ Number, required: true })
+  @Prop({ Number, required: false, default: null })
   bathroom: number;
   @Prop({ String, required: false, default: null })
   bathroomType: string;
