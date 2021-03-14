@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongoose';
 import {
   IsArray,
+  IsBoolean,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
@@ -26,6 +27,7 @@ export class CreateRealtyDto {
   @IsNumberString()
   readonly houseNumber: string;
 
+  @IsNumberString()
   readonly apartmentNumber: number;
 
   @IsNotEmpty()
@@ -46,6 +48,7 @@ export class CreateRealtyDto {
   @IsNumber()
   readonly rooms: number;
 
+  @IsNotEmpty()
   @IsString()
   readonly renovation: string;
 
@@ -57,24 +60,123 @@ export class CreateRealtyDto {
   @IsNumber()
   readonly price: number;
 
+  @IsNumber()
   readonly rating: number;
 
+  @IsNumber()
   readonly bathroom: number;
 
+  @IsNotEmpty()
+  @IsString()
   readonly bathroomType: string;
 
   @IsNumber()
   readonly balconyNumber: number;
 
   @IsNotEmpty()
+  @IsNotEmpty()
   @IsString()
   readonly description: string;
 
+  @IsNotEmpty()
+  @IsString()
   lat: string;
 
+  @IsNotEmpty()
+  @IsString()
   long: string;
 
   @IsNotEmpty()
   @IsMongoId()
   readonly ownerId: ObjectId;
+
+  @IsNumber()
+  landArea: number;
+
+  @IsNumber()
+  floorsNumber: number;
+
+  @IsNumber()
+  elevatorsNumber: number;
+
+  @IsNotEmpty()
+  @IsString()
+  wallsMaterial: string;
+
+  @IsNotEmpty()
+  @IsString()
+  buildingClass: string;
+
+  @IsNotEmpty()
+  @IsString()
+  lodgingClass: string;
+
+  @IsBoolean()
+  parkingSpace: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  furniture: string;
+
+  @IsBoolean()
+  appliances: boolean;
+
+  @IsBoolean()
+  internet: boolean;
+
+  @IsNumber()
+  conditionerNumber: number;
+
+  @IsBoolean()
+  heating: boolean;
+
+  @IsBoolean()
+  powerSupply: boolean;
+
+  @IsBoolean()
+  fireExtinguishing: boolean;
+
+  @IsBoolean()
+  sewerage: boolean;
+
+  @IsBoolean()
+  gas: boolean;
+
+  @IsBoolean()
+  waterSupply: boolean;
+
+  @IsBoolean()
+  conditioning: boolean;
+
+  @IsBoolean()
+  ventilation: boolean;
+
+  @IsBoolean()
+  security: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  windowsType: string;
+
+  @IsNumber()
+  ceilingHeight: number;
+
+  @IsBoolean()
+  concierge: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  plotType: string;
+
+  @IsNotEmpty()
+  @IsString()
+  enteringType: string;
+
+  @IsNotEmpty()
+  @IsString()
+  layoutType: string;
+
+  @IsNotEmpty()
+  @IsString()
+  territoryType: string;
 }
