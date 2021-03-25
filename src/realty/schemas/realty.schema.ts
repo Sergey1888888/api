@@ -102,6 +102,8 @@ export class Realty {
   lat: string;
   @Prop({ String, required: true })
   long: string;
+  @Prop({ type: Object, required: false, default: null })
+  infrastructureRating: any;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
   ownerId: mongoose.Schema.Types.ObjectId;
 }

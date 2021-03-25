@@ -2,7 +2,8 @@ import {
   IsArray,
   IsBoolean,
   IsNotEmpty,
-  IsNumber, IsNumberString,
+  IsNumber,
+  IsNumberString,
   IsString,
 } from 'class-validator';
 
@@ -165,4 +166,6 @@ export class UpdateRealtyDto {
   @IsNotEmpty()
   @IsString()
   long: string;
+
+  infrastructureRating: any;
 }

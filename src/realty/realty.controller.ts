@@ -17,6 +17,7 @@ import { CreateRealtyDto } from './dto/create-realty.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateUsersDto } from '../users/dto/update-users.dto';
 import { UpdateRealtyDto } from './dto/update-realty.dto';
+import { json } from 'express';
 
 @Controller('realty')
 export class RealtyController {
@@ -30,11 +31,49 @@ export class RealtyController {
   async GetAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
-    // @Query('sort') sort = text,
-    // @Query('filter') filter = text,
+    @Query('sort')
+    sort,
+    @Query('filter')
+    filter,
   ): Promise<Realty[]> {
+    let jsonSort = {
+      rooms: null,
+      price: 1,
+      area: null,
+    };
+    try {
+      jsonSort = JSON.parse(sort);
+    } catch (e) {
+      jsonSort = {
+        rooms: null,
+        price: 1,
+        area: null,
+      };
+    }
+    let jsonFilter = {
+      type: null,
+      minPrice: null,
+      maxPrice: null,
+      rooms: null,
+      area: null,
+      district: null,
+      street: null,
+    };
+    try {
+      jsonFilter = JSON.parse(filter);
+    } catch (e) {
+      jsonFilter = {
+        type: null,
+        minPrice: null,
+        maxPrice: null,
+        rooms: null,
+        area: null,
+        district: null,
+        street: null,
+      };
+    }
     limit = limit > 100 ? 100 : limit;
-    return this.realtyService.paginate(limit, page);
+    return this.realtyService.paginate(limit, page, jsonFilter, jsonSort);
   }
 
   @Get(':id')

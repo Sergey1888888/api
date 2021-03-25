@@ -179,4 +179,6 @@ export class CreateRealtyDto {
   @IsNotEmpty()
   @IsString()
   territoryType: string;
+
+  infrastructureRating: any;
 }

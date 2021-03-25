@@ -33,7 +33,6 @@ export class UsersController {
     return await this.usersService.getById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUsersDto: CreateUsersDto): Promise<string> {
