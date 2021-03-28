@@ -4,6 +4,11 @@ import { Document } from 'mongoose';
 
 export type RealtyDocument = Realty & Document;
 
+export enum SaleTypes {
+  sale,
+  rent,
+}
+
 @Schema()
 export class Realty {
   @Prop({ Number, required: false, default: Date.now() })
@@ -104,6 +109,12 @@ export class Realty {
   long: string;
   @Prop({ type: Object, required: false, default: null })
   infrastructureRating: any;
+  @Prop({ type: Boolean, required: false, default: false })
+  suspicious: boolean;
+  @Prop({ type: Boolean, required: false, default: false })
+  realtor: boolean;
+  @Prop({ type: SaleTypes, required: true, enum: SaleTypes })
+  encumbranceType: SaleTypes;
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true })
   ownerId: mongoose.Schema.Types.ObjectId;
 }

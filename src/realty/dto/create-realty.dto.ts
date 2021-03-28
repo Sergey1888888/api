@@ -2,12 +2,14 @@ import { ObjectId } from 'mongoose';
 import {
   IsArray,
   IsBoolean,
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsString,
 } from 'class-validator';
+import { SaleTypes } from '../schemas/realty.schema';
 
 export class CreateRealtyDto {
   created_at: number;
@@ -180,5 +182,11 @@ export class CreateRealtyDto {
   @IsString()
   territoryType: string;
 
+  @IsNotEmpty()
+  @IsEnum(SaleTypes)
+  encumbranceType: SaleTypes;
+
+  realtor: boolean;
+  suspicious: boolean;
   infrastructureRating: any;
 }

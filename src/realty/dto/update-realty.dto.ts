@@ -1,11 +1,13 @@
 import {
   IsArray,
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsNumberString,
   IsString,
 } from 'class-validator';
+import { SaleTypes } from '../schemas/realty.schema';
 
 export class UpdateRealtyDto {
   @IsNotEmpty()
@@ -167,5 +169,11 @@ export class UpdateRealtyDto {
   @IsString()
   long: string;
 
+  @IsNotEmpty()
+  @IsEnum(SaleTypes)
+  encumbranceType: SaleTypes;
+
+  realtor: boolean;
+  suspicious: boolean;
   infrastructureRating: any;
 }
