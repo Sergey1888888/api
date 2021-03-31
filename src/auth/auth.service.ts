@@ -30,6 +30,7 @@ export class AuthService {
       telegram: user._doc.telegram,
       whatsup: user._doc.whatsup,
       vk: user._doc.vk,
+      isAdmin: user._doc.isAdmin,
     };
     return {
       access_token: this.jwtService.sign(payload),
