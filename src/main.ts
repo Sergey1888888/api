@@ -12,6 +12,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.use({ origin: '*' });
   await app.listen(process.env.PORT || '80');
 }
 bootstrap();
