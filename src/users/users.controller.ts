@@ -18,8 +18,8 @@ import { UsersService } from './users.service';
 import { Users } from './schemas/users.schema';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 import { Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 
 @Controller('users')
 export class UsersController {

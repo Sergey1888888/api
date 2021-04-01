@@ -36,7 +36,6 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "express": "^4.17.1",
-    "file-api": "^0.10.4",
     "mongoose": "^5.11.15",
     "node-fetch": "^2.6.1",
     "passport": "^0.4.1",

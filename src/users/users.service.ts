@@ -12,8 +12,7 @@ import { Model, Types } from 'mongoose';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { hashPass } from '../helpers/passwordFunctions';
 import tokenGenerator from '../helpers/tokenGenerator';
-import * as FileAPI from 'file-api';
-const FileReader = FileAPI.FileReader;
+import { Express } from 'express';
 
 @Injectable()
 export class UsersService {
