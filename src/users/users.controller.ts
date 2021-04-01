@@ -48,7 +48,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @Put('avatar/:id')
   @HttpCode(HttpStatus.CREATED)
   async updateAvatar(
     @Param('id') id: string,
