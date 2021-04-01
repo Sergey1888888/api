@@ -12,7 +12,6 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.enableCors();
   await app.listen(process.env.PORT || '80');
 }
 bootstrap();
