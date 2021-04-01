@@ -1,4 +1,5 @@
 import {
+  BadGatewayException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -11,7 +12,8 @@ import { Model, Types } from 'mongoose';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { hashPass } from '../helpers/passwordFunctions';
 import tokenGenerator from '../helpers/tokenGenerator';
-import { UpdateImageUsersDto } from './dto/update-image-users.dto';
+import * as FileAPI from 'file-api';
+const FileReader = FileAPI.FileReader;
 
 @Injectable()
 export class UsersService {
@@ -54,31 +56,32 @@ export class UsersService {
 
   async updateAvatar(
     id: string,
-    updateImageDto: UpdateImageUsersDto,
+    imageFile: Express.Multer.File,
   ): Promise<Users> {
     if (!Types.ObjectId.isValid(id) || !(await this.usersModel.findById(id))) {
       throw new NotFoundException('User does not exist!');
     }
-    const token = await tokenGenerator();
-    const formdata = new FormData();
-    formdata.append('image', updateImageDto.avatar);
-
+    await tokenGenerator();
+    const base64 = imageFile.buffer.toString('base64');
     const requestOptions = {
       method: 'POST',
       headers: {
         Authorization: 'Client-ID b4ab0309e1d9839',
+        'content-type': 'multipart/form-data',
       },
-      body: formdata,
+      body: base64,
     };
-
-    fetch('https://api.imgur.com/3/image', requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        updateImageDto.avatar = result.data.link;
-      })
-      .catch((error) => console.log('error', error));
-    return this.usersModel.findByIdAndUpdate(id, updateImageDto, { new: true });
+    const response = await fetch(
+      'https://api.imgur.com/3/image',
+      requestOptions,
+    );
+    const json = await response.json();
+    const link = json.data.link;
+    return this.usersModel.findByIdAndUpdate(
+      id,
+      { avatar: link },
+      { new: true },
+    );
   }
 
   async update(id: string, updateUsersDto: UpdateUsersDto): Promise<Users> {

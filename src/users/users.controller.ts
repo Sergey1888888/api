@@ -1,15 +1,17 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  Header,
   HttpCode,
   HttpStatus,
   Param,
   Post,
   Put,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersService } from './users.service';
@@ -17,6 +19,7 @@ import { Users } from './schemas/users.schema';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateImageUsersDto } from './dto/update-image-users.dto';
+import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
 
 @Controller('users')
 export class UsersController {
@@ -47,14 +50,27 @@ export class UsersController {
     return 'User was deleted!';
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put('avatar/:id')
-  @HttpCode(HttpStatus.CREATED)
-  async updateAvatar(
+  // @UseGuards(JwtAuthGuard)
+  // @Put('avatar/:id')
+  // @HttpCode(HttpStatus.CREATED)
+  // async updateAvatar(
+  //   @Param('id') id: string,
+  //   @Body() updateImageDto: UpdateImageUsersDto,
+  // ): Promise<string> {
+  //   await this.usersService.updateAvatar(id, updateImageDto);
+  //   return 'Avatar was updated!';
+  // }
+
+  @Put('upload/:id')
+  @UseInterceptors(FileInterceptor('avatar'))
+  async uploadFile(
     @Param('id') id: string,
-    @Body() updateImageDto: UpdateImageUsersDto,
-  ): Promise<string> {
-    await this.usersService.updateAvatar(id, updateImageDto);
+    @UploadedFile() avatar: Express.Multer.File,
+  ) {
+    if (!avatar?.originalname.match(/\.(jpg|jpeg|png|)$/)) {
+      return new BadRequestException('Only png, jpeg are allowed!');
+    }
+    await this.usersService.updateAvatar(id, avatar);
     return 'Avatar was updated!';
   }
 
