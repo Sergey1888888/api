@@ -61,12 +61,12 @@ export class UsersController {
     if (!avatar?.originalname.match(/\.(jpg|jpeg|png|)$/)) {
       return new BadRequestException('Only png, jpeg are allowed!');
     }
-    const url = await this.usersService.updateAvatar(id, avatar);
+    const profile = await this.usersService.updateAvatar(id, avatar);
     return {
       name: avatar.originalname,
       status: 'done',
-      url,
-      thumbUrl: url,
+      url: profile.avatar,
+      thumbUrl: profile.avatar,
     };
   }
 
