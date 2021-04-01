@@ -60,27 +60,24 @@ export class UsersService {
       throw new NotFoundException('User does not exist!');
     }
     const token = await tokenGenerator();
-    //TODO:
-    // НАСТРОИТЬ ЭТО
-    //
-    // const formdata = new FormData();
-    // formdata.append('image', updateImageDto.avatar);
-    //
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: 'Client-ID b4ab0309e1d9839',
-    //   },
-    //   body: formdata,
-    // };
-    //
-    // fetch('https://api.imgur.com/3/image', requestOptions)
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //     updateImageDto.avatar = result.data.link;
-    //   })
-    //   .catch((error) => console.log('error', error));
+    const formdata = new FormData();
+    formdata.append('image', updateImageDto.avatar);
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Client-ID b4ab0309e1d9839',
+      },
+      body: formdata,
+    };
+
+    fetch('https://api.imgur.com/3/image', requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        updateImageDto.avatar = result.data.link;
+      })
+      .catch((error) => console.log('error', error));
     return this.usersModel.findByIdAndUpdate(id, updateImageDto, { new: true });
   }
 
@@ -89,9 +86,13 @@ export class UsersService {
       throw new NotFoundException('User does not exist!');
     }
     if (updateUsersDto.password) {
-      return this.usersModel.findByIdAndUpdate(id, hashPass(updateUsersDto, 10), {
-        new: true,
-      });
+      return this.usersModel.findByIdAndUpdate(
+        id,
+        hashPass(updateUsersDto, 10),
+        {
+          new: true,
+        },
+      );
     }
     return this.usersModel.findByIdAndUpdate(id, updateUsersDto, { new: true });
   }
