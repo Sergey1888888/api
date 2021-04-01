@@ -30,6 +30,7 @@ export class AuthService {
       telegram: user._doc.telegram,
       whatsup: user._doc.whatsup,
       vk: user._doc.vk,
+      avatar: user._doc.avatar,
       isAdmin: user._doc.isAdmin,
     };
     return {

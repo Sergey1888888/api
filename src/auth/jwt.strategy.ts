@@ -24,6 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       telegram: payload.telegram,
       whatsup: payload.whatsup,
       vk: payload.vk,
+      avatar: payload.avatar,
       isAdmin: payload.isAdmin,
     };
   }
