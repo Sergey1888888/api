@@ -19,7 +19,7 @@ import { Users } from './schemas/users.schema';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
-import { Express } from 'express-serve-static-core';
+import { Express } from 'express';
 
 @Controller('users')
 export class UsersController {
