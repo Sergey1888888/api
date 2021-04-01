@@ -18,8 +18,8 @@ import { UsersService } from './users.service';
 import { Users } from './schemas/users.schema';
 import { UpdateUsersDto } from './dto/update-users.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateImageUsersDto } from './dto/update-image-users.dto';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors/file.interceptor';
+import { Express } from 'express-serve-static-core';
 
 @Controller('users')
 export class UsersController {
