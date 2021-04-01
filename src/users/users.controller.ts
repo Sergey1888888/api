@@ -51,17 +51,7 @@ export class UsersController {
     return 'User was deleted!';
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Put('avatar/:id')
-  // @HttpCode(HttpStatus.CREATED)
-  // async updateAvatar(
-  //   @Param('id') id: string,
-  //   @Body() updateImageDto: UpdateImageUsersDto,
-  // ): Promise<string> {
-  //   await this.usersService.updateAvatar(id, updateImageDto);
-  //   return 'Avatar was updated!';
-  // }
-
+  @UseGuards(JwtAuthGuard)
   @Put('upload/:id')
   @UseInterceptors(FileInterceptor('avatar'))
   async uploadFile(
@@ -71,8 +61,13 @@ export class UsersController {
     if (!avatar?.originalname.match(/\.(jpg|jpeg|png|)$/)) {
       return new BadRequestException('Only png, jpeg are allowed!');
     }
-    await this.usersService.updateAvatar(id, avatar);
-    return 'Avatar was updated!';
+    const url = await this.usersService.updateAvatar(id, avatar);
+    return {
+      name: avatar.originalname,
+      status: 'done',
+      url,
+      thumbUrl: url,
+    };
   }
 
   @UseGuards(JwtAuthGuard)
