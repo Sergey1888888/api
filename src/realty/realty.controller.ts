@@ -76,6 +76,33 @@ export class RealtyController {
     return this.realtyService.paginate(limit, page, jsonFilter, jsonSort);
   }
 
+  @Get('total')
+  async getTotalRealties(@Query('filter') filter): Promise<number> {
+    let jsonFilter = {
+      type: null,
+      minPrice: null,
+      maxPrice: null,
+      rooms: null,
+      area: null,
+      district: null,
+      street: null,
+    };
+    try {
+      jsonFilter = JSON.parse(filter);
+    } catch (e) {
+      jsonFilter = {
+        type: null,
+        minPrice: null,
+        maxPrice: null,
+        rooms: null,
+        area: null,
+        district: null,
+        street: null,
+      };
+    }
+    return this.realtyService.getTotalRealties(jsonFilter);
+  }
+
   @Get(':id')
   async getOne(@Param('id') id: string): Promise<Realty> {
     return this.realtyService.getById(id);

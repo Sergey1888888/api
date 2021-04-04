@@ -127,6 +127,11 @@ export class RealtyService {
       .exec();
   }
 
+  async getTotalRealties(filters: IFilterObject): Promise<number> {
+    const total = await this.realtyModel.find(filterMaker(filters)).exec();
+    return total.length;
+  }
+
   async getById(id: string): Promise<Realty> {
     if (!Types.ObjectId.isValid(id) || !(await this.realtyModel.findById(id))) {
       throw new NotFoundException('Realty does not exist!');
