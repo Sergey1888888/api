@@ -3,9 +3,9 @@ import { IFilterObject, ISortObject } from '../realty/realty.service';
 export function filterMaker(filter: IFilterObject) {
   const result = {
     type: { $eq: filter.type || 'Квартира' },
-    price: { $gte: filter.minPrice || null, $lte: filter.maxPrice || null },
-    rooms: { $eq: filter.rooms || null },
-    area: { $gte: filter.area || null },
+    price: { $gte: filter.minPrice ?? null, $lte: filter.maxPrice || null },
+    rooms: { $eq: filter.rooms ?? null },
+    area: { $gte: filter.area ?? null },
     district: { $eq: filter.district || null },
     street: { $eq: filter.street || null },
   };
