@@ -26,6 +26,7 @@ export interface IFilterObject {
   area: number | null;
   district: string | null;
   street: string | null;
+  encumbranceType: number | null;
 }
 
 export interface ISortObject {

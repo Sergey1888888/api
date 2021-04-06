@@ -58,6 +58,7 @@ export class RealtyController {
       area: null,
       district: null,
       street: null,
+      encumbranceType: null,
     };
     try {
       jsonFilter = JSON.parse(filter);
@@ -70,6 +71,7 @@ export class RealtyController {
         area: null,
         district: null,
         street: null,
+        encumbranceType: null,
       };
     }
     limit = limit > 100 ? 100 : limit;
@@ -86,6 +88,7 @@ export class RealtyController {
       area: null,
       district: null,
       street: null,
+      encumbranceType: null,
     };
     try {
       jsonFilter = JSON.parse(filter);
@@ -98,6 +101,7 @@ export class RealtyController {
         area: null,
         district: null,
         street: null,
+        encumbranceType: null,
       };
     }
     return this.realtyService.getTotalRealties(jsonFilter);
