@@ -8,14 +8,13 @@ export function filterMaker(filter: IFilterObject) {
     area: { $gte: filter.area ?? null },
     district: { $eq: filter.district || null },
     street: { $eq: filter.street || null },
-    encumbranceType: { $eq: filter.encumbranceType ?? null },
+    encumbranceType: { $eq: filter.encumbranceType || 0 },
   };
   if (!filter.minPrice && !filter.maxPrice) delete result.price;
   if (!filter.rooms) delete result.rooms;
   if (!filter.area) delete result.area;
   if (!filter.district) delete result.district;
   if (!filter.street) delete result.street;
-  if (!filter.encumbranceType) delete result.encumbranceType;
   return result;
 }
 
