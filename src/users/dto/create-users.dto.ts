@@ -17,7 +17,6 @@ export class CreateUsersDto {
   readonly phoneNumber: string;
 
   @IsNotEmpty()
-  @IsEmail()
   @IsString()
   readonly email: string;
 
