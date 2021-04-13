@@ -207,4 +207,11 @@ export class RealtyService {
       new: true,
     });
   }
+
+  async delete(id: string): Promise<Realty> {
+    if (!Types.ObjectId.isValid(id) || !(await this.realtyModel.findById(id))) {
+      throw new NotFoundException('Realty does not exist!');
+    }
+    return this.realtyModel.findByIdAndDelete(id);
+  }
 }

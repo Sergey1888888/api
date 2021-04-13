@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   HttpCode,
@@ -131,6 +132,12 @@ export class RealtyController {
     @Body() updateRealtyDto: UpdateRealtyDto,
   ): Promise<string> {
     await this.realtyService.update(id, updateRealtyDto);
+    return 'Realty was changed!';
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<string> {
+    await this.realtyService.delete(id);
     return 'Realty was changed!';
   }
 }
