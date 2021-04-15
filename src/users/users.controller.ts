@@ -12,7 +12,7 @@ import {
   Put,
   UploadedFile,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors, Header,
 } from '@nestjs/common';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersService } from './users.service';
@@ -39,6 +39,7 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @Header('Access-Control-Allow-Origin', '*')
   async create(@Body() createUsersDto: CreateUsersDto): Promise<string> {
     await this.usersService.create(createUsersDto);
     return 'User was created!';
