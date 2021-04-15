@@ -39,7 +39,6 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Header('Access-Control-Allow-Origin', '*')
   async create(@Body() createUsersDto: CreateUsersDto): Promise<string> {
     await this.usersService.create(createUsersDto);
     return 'User was created!';
