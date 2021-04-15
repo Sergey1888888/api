@@ -6,13 +6,12 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Headers,
   Param,
   Post,
   Put,
   UploadedFile,
   UseGuards,
-  UseInterceptors, Header,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UsersService } from './users.service';

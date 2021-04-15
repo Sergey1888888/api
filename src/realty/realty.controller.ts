@@ -11,16 +11,14 @@ import {
   Put,
   Query,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { RealtyService } from './realty.service';
 import { Realty } from './schemas/realty.schema';
 import { CreateRealtyDto } from './dto/create-realty.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateUsersDto } from '../users/dto/update-users.dto';
 import { UpdateRealtyDto } from './dto/update-realty.dto';
-import { json } from 'express';
+import { Express } from 'express';
+
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('realty')
