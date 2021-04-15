@@ -10,7 +10,9 @@ import {
   Post,
   Put,
   Query,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { RealtyService } from './realty.service';
 import { Realty } from './schemas/realty.schema';
@@ -19,6 +21,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateUsersDto } from '../users/dto/update-users.dto';
 import { UpdateRealtyDto } from './dto/update-realty.dto';
 import { json } from 'express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('realty')
 export class RealtyController {
@@ -132,6 +135,18 @@ export class RealtyController {
     @Body() updateRealtyDto: UpdateRealtyDto,
   ): Promise<string> {
     await this.realtyService.update(id, updateRealtyDto);
+    return 'Realty was changed!';
+  }
+
+  @Put('photos/:id')
+  @UseInterceptors(FilesInterceptor('files'))
+  async updatePhotos(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File,
+    @Body() photosToSave: string,
+  ): Promise<string> {
+    const toSave = JSON.parse(photosToSave['photosToSave']);
+    await this.realtyService.updatePhotos(id, files, toSave);
     return 'Realty was changed!';
   }
 

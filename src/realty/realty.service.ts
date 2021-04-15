@@ -16,7 +16,8 @@ import {
   ratingObjectMaker,
   sortMaker,
 } from '../helpers/objectMaker';
-import axios from 'axios';
+import { Express } from 'express';
+import tokenGenerator from '../helpers/tokenGenerator';
 
 export interface IFilterObject {
   type: string | null;
@@ -206,6 +207,46 @@ export class RealtyService {
     return this.realtyModel.findByIdAndUpdate(id, updateRealtyDto, {
       new: true,
     });
+  }
+
+  async updatePhotos(
+    id: string,
+    files: any,
+    toSave: Array<string>,
+  ): Promise<Realty> {
+    if (!Types.ObjectId.isValid(id) || !(await this.realtyModel.findById(id))) {
+      throw new NotFoundException('Realty does not exist!');
+    }
+    const urls = [];
+    for (const photo of toSave) {
+      urls.push(photo);
+    }
+    await tokenGenerator();
+    for (let i = 0; i < files.length; i++) {
+      const base64 = files[i].buffer.toString('base64');
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: 'Client-ID b4ab0309e1d9839',
+          'content-type': 'multipart/form-data',
+        },
+        body: base64,
+      };
+      const response = await fetch(
+        'https://api.imgur.com/3/image',
+        requestOptions,
+      );
+      const json = await response.json();
+      const link = json.data.link;
+      urls.push(link);
+    }
+    return this.realtyModel.findByIdAndUpdate(
+      id,
+      { photos: urls },
+      {
+        new: true,
+      },
+    );
   }
 
   async delete(id: string): Promise<Realty> {
