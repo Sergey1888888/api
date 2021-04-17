@@ -204,6 +204,38 @@ export class RealtyService {
     if (!Types.ObjectId.isValid(id) || !(await this.realtyModel.findById(id))) {
       throw new NotFoundException('Realty does not exist!');
     }
+    const { lat, long } = await this.realtyModel.findById(id);
+    if (lat !== updateRealtyDto.lat && long !== updateRealtyDto.long) {
+      const response = await fetch(
+        encodeURI(
+          `https://eu1.locationiq.com/v1/search.php?key=pk.cfcfe11a1331ee8fb9e2e5dc4715ff1b&country=Россия&city=Волгоград&street=${updateRealtyDto.street} ${updateRealtyDto.houseNumber}&format=json`,
+        ),
+      );
+      const json = await response.json();
+      if (json.length === 0) {
+        throw new ConflictException('Cant find realty with this address!');
+      }
+      updateRealtyDto.lat = json[0].lat;
+      updateRealtyDto.long = json[0].lon;
+
+      const responseRating = await fetch(
+        'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify([updateRealtyDto]),
+        },
+      );
+      const jsonRating = await responseRating.json();
+      if (jsonRating.length === 0 || jsonRating.code != 0) {
+        throw new ConflictException('Error');
+      }
+      updateRealtyDto.infrastructureRating = infrastructureRatingMaker(
+        jsonRating.data[0].Rating,
+      );
+    }
     return this.realtyModel.findByIdAndUpdate(id, updateRealtyDto, {
       new: true,
     });
