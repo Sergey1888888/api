@@ -16,8 +16,9 @@ import {
   ratingObjectMaker,
   sortMaker,
 } from '../helpers/objectMaker';
-import { Express } from 'express';
+import { Express, json } from 'express';
 import tokenGenerator from '../helpers/tokenGenerator';
+import { PhotosService } from '../photos/photos.service';
 
 export interface IFilterObject {
   type: string | null;
@@ -40,6 +41,7 @@ export interface ISortObject {
 export class RealtyService {
   constructor(
     @InjectModel(Realty.name) private realtyModel: Model<RealtyDocument>,
+    private readonly photosService: PhotosService,
   ) {}
 
   async getAll(): Promise<Realty[]> {
@@ -271,6 +273,28 @@ export class RealtyService {
       const link = json.data.link;
       urls.push(link);
     }
+    const photosWithId = [];
+    for (const photo of urls) {
+      photosWithId.push({ _id: id, url: photo });
+    }
+    console.log(JSON.stringify(photosWithId));
+    const responseHashes = await fetch(
+      'https://imagehash-service-zis.herokuapp.com/imagehash/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(photosWithId),
+      },
+    );
+    const jsonHashes = await responseHashes.json();
+    const hashes = JSON.parse(jsonHashes.data);
+    console.log(hashes);
+    if (jsonHashes.length === 0 || jsonHashes.code != 0) {
+      throw new ConflictException('Error');
+    }
+    await this.photosService.createByRealtyId(id, hashes, urls);
     return this.realtyModel.findByIdAndUpdate(
       id,
       { photos: urls },
