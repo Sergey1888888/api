@@ -11,6 +11,7 @@ import {
   Put,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { RealtyService } from './realty.service';
@@ -20,6 +21,7 @@ import { UpdateRealtyDto } from './dto/update-realty.dto';
 import { Express } from 'express';
 
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('realty')
 export class RealtyController {
@@ -119,14 +121,16 @@ export class RealtyController {
     return this.realtyService.getByUserId(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Cache-Control', 'none')
   async create(@Body() createRealtyDto: CreateRealtyDto): Promise<string> {
-    await this.realtyService.create(createRealtyDto);
-    return 'Realty was created!';
+    const realty: any = await this.realtyService.create(createRealtyDto);
+    return realty._id;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -136,6 +140,7 @@ export class RealtyController {
     return 'Realty was changed!';
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put('photos/:id')
   @UseInterceptors(FilesInterceptor('files'))
   async updatePhotos(
@@ -148,6 +153,7 @@ export class RealtyController {
     return 'Realty was changed!';
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<string> {
     await this.realtyService.delete(id);

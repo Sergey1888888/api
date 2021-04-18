@@ -190,7 +190,6 @@ export class RealtyService {
       },
     );
     const jsonRating = await responseRating.json();
-    console.log(jsonRating);
     if (jsonRating.length === 0 || jsonRating.code != 0) {
       throw new ConflictException('Error');
     }
@@ -217,7 +216,7 @@ export class RealtyService {
       }
       updateRealtyDto.lat = json[0].lat;
       updateRealtyDto.long = json[0].lon;
-
+      const dataForInfr = [{ ...updateRealtyDto, _id: id }];
       const responseRating = await fetch(
         'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
         {
@@ -225,7 +224,7 @@ export class RealtyService {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify([updateRealtyDto]),
+          body: JSON.stringify(dataForInfr),
         },
       );
       const jsonRating = await responseRating.json();
