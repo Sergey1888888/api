@@ -277,7 +277,6 @@ export class RealtyService {
     for (const photo of urls) {
       photosWithId.push({ _id: id, url: photo });
     }
-    console.log(JSON.stringify(photosWithId));
     const responseHashes = await fetch(
       'https://imagehash-service-zis.herokuapp.com/imagehash/',
       {
