@@ -26,9 +26,14 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('realty')
 export class RealtyController {
   constructor(private readonly realtyService: RealtyService) {}
-  @Get('/all')
-  async all(): Promise<Realty[]> {
-    return this.realtyService.getAll();
+  @Get('/coords')
+  async all(): Promise<{ lat: number; long: number }[]> {
+    const realties = await this.realtyService.getAll();
+    const coords = realties.map((realty) => ({
+      lat: parseFloat(realty.lat),
+      long: parseFloat(realty.long),
+    }));
+    return coords;
   }
 
   @Get('/')
