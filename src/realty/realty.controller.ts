@@ -36,6 +36,8 @@ export class RealtyController {
       type: realty.type,
       rooms: realty.rooms,
       photo: realty.photos[0],
+      street: realty.street,
+      area: realty.area,
       lat: parseFloat(realty.lat),
       long: parseFloat(realty.long),
     }));
