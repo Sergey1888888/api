@@ -37,6 +37,7 @@ export class RealtyController {
       rooms: realty.rooms,
       photo: realty.photos[0],
       street: realty.street,
+      houseNumber: realty.houseNumber,
       area: realty.area,
       lat: parseFloat(realty.lat),
       long: parseFloat(realty.long),
