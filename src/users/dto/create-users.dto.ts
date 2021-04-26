@@ -35,4 +35,7 @@ export class CreateUsersDto {
 
   @IsBoolean()
   readonly isAdmin: boolean;
+
+  @IsString()
+  userChatId: string;
 }

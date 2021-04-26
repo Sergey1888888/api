@@ -27,6 +27,8 @@ export class Users {
   whatsup: string;
   @Prop({ Boolean, required: false, default: false })
   isAdmin: boolean;
+  @Prop({ String, required: false, default: null })
+  userChatId: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

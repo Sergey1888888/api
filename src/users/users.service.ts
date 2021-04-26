@@ -43,6 +43,26 @@ export class UsersService {
       throw new ConflictException('Phone number already exist!');
     }
     const user = new this.usersModel(hashPass(usersDto, 10));
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'PRIVATE-KEY': 'e5999050-82b6-4266-821e-1ac2a2f93e62',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: user._id,
+        secret: usersDto.password,
+        custom_json: {
+          username: `${usersDto.surname} ${usersDto.name}`,
+        },
+      }),
+    };
+    const response = await fetch(
+      'https://api.chatengine.io/users/',
+      requestOptions,
+    );
+    const json = await response.json();
+    user.userChatId = json.id;
     return user.save();
   }
 
@@ -76,6 +96,21 @@ export class UsersService {
     );
     const json = await response.json();
     const link = json.data.link;
+    // const requestOptionsChat = {
+    //   method: 'POST',
+    //   headers: {
+    //     'PRIVATE-KEY': 'e5999050-82b6-4266-821e-1ac2a2f93e62',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     username: `${usersDto.surname} ${usersDto.name} id${user._id}`,
+    //     secret: usersDto.password,
+    //   }),
+    // };
+    // const responseChat = await fetch(
+    //   'https://api.chatengine.io/users/',
+    //   requestOptions,
+    // );
     return this.usersModel.findByIdAndUpdate(
       id,
       { avatar: link },
