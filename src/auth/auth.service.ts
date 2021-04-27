@@ -31,6 +31,7 @@ export class AuthService {
       whatsup: user._doc.whatsup,
       vk: user._doc.vk,
       avatar: user._doc.avatar,
+      userChatId: user._doc.userChatId,
       isAdmin: user._doc.isAdmin,
     };
     return {

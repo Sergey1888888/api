@@ -50,7 +50,6 @@ export class UsersController {
     return 'User was deleted!';
   }
 
-  @UseGuards(JwtAuthGuard)
   @Put('upload/:id')
   @UseInterceptors(FileInterceptor('avatar'))
   async uploadFile(

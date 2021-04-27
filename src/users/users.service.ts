@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -13,7 +12,6 @@ import { UpdateUsersDto } from './dto/update-users.dto';
 import { hashPass } from '../helpers/passwordFunctions';
 import tokenGenerator from '../helpers/tokenGenerator';
 import { Express } from 'express';
-import * as FormData from 'form-data';
 
 @Injectable()
 export class UsersService {
@@ -98,21 +96,6 @@ export class UsersService {
     );
     const json = await response.json();
     const link = json.data.link;
-    const formData = new FormData();
-    formData.append('avatar', base64, imageFile.filename);
-    const requestOptionsChat = {
-      method: 'PATCH',
-      headers: {
-        'PRIVATE-KEY': 'e5999050-82b6-4266-821e-1ac2a2f93e62',
-        'Content-Type': 'multipart/form-data',
-      },
-      body: formData,
-    };
-    const responseChat = await fetch(
-      `https://api.chatengine.io/users/${user.userChatId}`,
-      requestOptionsChat,
-    );
-    console.log(responseChat);
     return this.usersModel.findByIdAndUpdate(
       id,
       { avatar: link },
