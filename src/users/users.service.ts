@@ -13,6 +13,7 @@ import { UpdateUsersDto } from './dto/update-users.dto';
 import { hashPass } from '../helpers/passwordFunctions';
 import tokenGenerator from '../helpers/tokenGenerator';
 import { Express } from 'express';
+import * as FormData from 'form-data';
 
 @Injectable()
 export class UsersService {
