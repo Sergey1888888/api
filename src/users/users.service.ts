@@ -13,7 +13,6 @@ import { UpdateUsersDto } from './dto/update-users.dto';
 import { hashPass } from '../helpers/passwordFunctions';
 import tokenGenerator from '../helpers/tokenGenerator';
 import { Express } from 'express';
-import * as FormData from 'form-data';
 
 @Injectable()
 export class UsersService {
@@ -99,7 +98,7 @@ export class UsersService {
     const json = await response.json();
     const link = json.data.link;
     const formData = new FormData();
-    formData.append('avatar', imageFile, imageFile.originalname);
+    formData.append('avatar', base64, imageFile.filename);
     const requestOptionsChat = {
       method: 'PATCH',
       headers: {
