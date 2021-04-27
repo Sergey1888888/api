@@ -109,6 +109,7 @@ export class UsersService {
       `https://api.chatengine.io/users/${user.userChatId}`,
       requestOptionsChat,
     );
+    console.log(responseChat);
     return this.usersModel.findByIdAndUpdate(
       id,
       { avatar: link },
