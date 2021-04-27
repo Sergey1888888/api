@@ -103,9 +103,7 @@ export class UsersService {
         'PRIVATE-KEY': 'e5999050-82b6-4266-821e-1ac2a2f93e62',
         'Content-Type': 'multipart/form-data',
       },
-      body: JSON.stringify({
-        avatar: imageFile,
-      }),
+      body: base64,
     };
     const responseChat = await fetch(
       `https://api.chatengine.io/users/${user.userChatId}`,
