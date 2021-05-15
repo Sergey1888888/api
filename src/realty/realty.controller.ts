@@ -27,10 +27,36 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class RealtyController {
   constructor(private readonly realtyService: RealtyService) {}
   @Get('/coords')
-  async all(): Promise<
+  async all(
+    @Query('filter') filter,
+  ): Promise<
     { type: string; rooms: number; photo: string; lat: number; long: number }[]
   > {
-    const realties = await this.realtyService.getAll();
+    let jsonFilter = {
+      type: null,
+      minPrice: null,
+      maxPrice: null,
+      rooms: null,
+      area: null,
+      district: null,
+      street: null,
+      encumbranceType: null,
+    };
+    try {
+      jsonFilter = JSON.parse(filter);
+    } catch (e) {
+      jsonFilter = {
+        type: null,
+        minPrice: null,
+        maxPrice: null,
+        rooms: null,
+        area: null,
+        district: null,
+        street: null,
+        encumbranceType: null,
+      };
+    }
+    const realties = await this.realtyService.getAll(jsonFilter);
     const coords = realties.map((realty: any) => ({
       id: realty._id,
       type: realty.type,

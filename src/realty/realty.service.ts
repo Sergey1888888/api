@@ -44,8 +44,8 @@ export class RealtyService {
     private readonly photosService: PhotosService,
   ) {}
 
-  async getAll(): Promise<Realty[]> {
-    return this.realtyModel.find().exec();
+  async getAll(filter: IFilterObject): Promise<Realty[]> {
+    return this.realtyModel.find(filterMaker(filter)).exec();
   }
 
   async paginate(
