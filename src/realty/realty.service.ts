@@ -13,10 +13,8 @@ import { UpdateRealtyDto } from './dto/update-realty.dto';
 import {
   filterMaker,
   infrastructureRatingMaker,
-  ratingObjectMaker,
   sortMaker,
 } from '../helpers/objectMaker';
-import { Express, json } from 'express';
 import tokenGenerator from '../helpers/tokenGenerator';
 import { PhotosService } from '../photos/photos.service';
 
@@ -56,79 +54,89 @@ export class RealtyService {
   ): Promise<Realty[]> {
     if (filter.maxPrice < filter.minPrice)
       throw new BadRequestException('minPrice must be less than maxPrice');
-    const realties = await this.realtyModel
-      .find(filterMaker(filter))
-      .sort(sortMaker(sort))
-      .skip((page - 1) * limit)
-      .limit(+limit)
-      .exec();
-    const toUpdateRealties = realties.filter((realty) => {
-      if (
-        realty.infrastructureRating === null ||
-        (Date.now() - realty.infrastructureRating.created_at) /
-          (1000 * 3600 * 24) >
-          180
-      ) {
-        return realty;
-      }
-    });
-    if (toUpdateRealties.length === 0) {
-      const responseAllRating = await fetch(
-        'https://rating-service-zis.herokuapp.com/rating',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'user-agent': 'PostmanRuntime/7.26.10',
-          },
-          body: JSON.stringify(
-            ratingObjectMaker(realties, filterMaker(filter)),
-          ),
-        },
-      );
-      const jsonAllRating = await responseAllRating.json();
-      if (jsonAllRating.code != 0) {
-        throw new ConflictException('Error');
-      }
-      return jsonAllRating.data;
-    }
-    const ratings: Array<any> = [];
-    for (const realty of toUpdateRealties) {
-      const responseRating = await fetch(
-        'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'user-agent': 'PostmanRuntime/7.26.10',
-          },
-          body: JSON.stringify([realty]),
-        },
-      );
-      const jsonRating = await responseRating.json();
-      if (jsonRating.code != 0) {
-        throw new ConflictException('Error');
-      }
-      ratings.push(jsonRating.data[0]);
-    }
-    const toSave = realties.map((realty) => {
-      const rating = ratings.filter((item) => item._id == realty._id);
-      if (rating.length != 0) {
-        realty.infrastructureRating = infrastructureRatingMaker(
-          rating[0].Rating,
-        );
-        return realty;
-      }
-    });
-    for (const item of toSave) {
-      await this.update(item._id, item);
-    }
     return this.realtyModel
       .find(filterMaker(filter))
       .sort(sortMaker(sort))
       .skip((page - 1) * limit)
       .limit(+limit)
       .exec();
+    // const realties = await this.realtyModel
+    //   .find(filterMaker(filter))
+    //   .sort(sortMaker(sort))
+    //   .skip((page - 1) * limit)
+    //   .limit(+limit)
+    //   .exec();
+    // const toUpdateRealties = realties.filter((realty) => {
+    //   if (
+    //     realty.infrastructureRating === null ||
+    //     (Date.now() - realty.infrastructureRating.created_at) /
+    //       (1000 * 3600 * 24) >
+    //       180
+    //   ) {
+    //     return realty;
+    //   }
+    // });
+    // if (toUpdateRealties.length === 0) {
+    //   const responseAllRating = await fetch(
+    //     'https://rating-service-zis.herokuapp.com/rating',
+    //     {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'user-agent': 'PostmanRuntime/7.26.10',
+    //       },
+    //       body: JSON.stringify(
+    //         ratingObjectMaker(realties, filterMaker(filter)),
+    //       ),
+    //     },
+    //   );
+    //   const jsonAllRating = await responseAllRating.json();
+    //   if (jsonAllRating.code != 0) {
+    //     throw new ConflictException('Error');
+    //   }
+    //   return jsonAllRating.data;
+    // }
+    // const ratings: Array<any> = [];
+    // for (const realty of toUpdateRealties) {
+    //   try {
+    //     const responseRating = await fetch(
+    //       'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
+    //       {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'user-agent': 'PostmanRuntime/7.26.10',
+    //         },
+    //         body: JSON.stringify([realty]),
+    //       },
+    //     );
+    //     const jsonRating = await responseRating.json();
+    //     if (jsonRating.code != 0) {
+    //       throw new ConflictException('Error');
+    //     }
+    //     ratings.push(jsonRating.data[0]);
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+    // const toSave = realties.map((realty) => {
+    //   const rating = ratings.filter((item) => item._id == realty._id);
+    //   if (rating.length != 0) {
+    //     realty.infrastructureRating = infrastructureRatingMaker(
+    //       rating[0].Rating,
+    //     );
+    //     return realty;
+    //   }
+    // });
+    // for (const item of toSave) {
+    //   await this.update(item._id, item);
+    // }
+    // return this.realtyModel
+    //   .find(filterMaker(filter))
+    //   .sort(sortMaker(sort))
+    //   .skip((page - 1) * limit)
+    //   .limit(+limit)
+    //   .exec();
   }
 
   async getTotalRealties(filters: IFilterObject): Promise<number> {
@@ -181,23 +189,27 @@ export class RealtyService {
 
     const realty = new this.realtyModel(realtyDto);
     const savedRealty = await realty.save();
-    const responseRating = await fetch(
-      'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      const responseRating = await fetch(
+        'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify([savedRealty]),
         },
-        body: JSON.stringify([savedRealty]),
-      },
-    );
-    const jsonRating = await responseRating.json();
-    if (jsonRating.length === 0 || jsonRating.code != 0) {
-      throw new ConflictException('Error');
+      );
+      const jsonRating = await responseRating.json();
+      if (jsonRating.length === 0 || jsonRating.code != 0) {
+        throw new ConflictException('Error');
+      }
+      savedRealty.infrastructureRating = infrastructureRatingMaker(
+        jsonRating.data[0].Rating,
+      );
+    } catch (e) {
+      console.log(e);
     }
-    savedRealty.infrastructureRating = infrastructureRatingMaker(
-      jsonRating.data[0].Rating,
-    );
     return await savedRealty.save();
   }
 
@@ -219,23 +231,27 @@ export class RealtyService {
       updateRealtyDto.lat = json[0].lat;
       updateRealtyDto.long = json[0].lon;
       const dataForInfr = [{ ...updateRealtyDto, _id: id }];
-      const responseRating = await fetch(
-        'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const responseRating = await fetch(
+          'https://infrastructure-service-zis.herokuapp.com/infrastructure/',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataForInfr),
           },
-          body: JSON.stringify(dataForInfr),
-        },
-      );
-      const jsonRating = await responseRating.json();
-      if (jsonRating.length === 0 || jsonRating.code != 0) {
-        throw new ConflictException('Error');
+        );
+        const jsonRating = await responseRating.json();
+        if (jsonRating.length === 0 || jsonRating.code != 0) {
+          throw new ConflictException('Error');
+        }
+        updateRealtyDto.infrastructureRating = infrastructureRatingMaker(
+          jsonRating.data[0].Rating,
+        );
+      } catch (e) {
+        console.log(e);
       }
-      updateRealtyDto.infrastructureRating = infrastructureRatingMaker(
-        jsonRating.data[0].Rating,
-      );
     }
     return this.realtyModel.findByIdAndUpdate(id, updateRealtyDto, {
       new: true,
