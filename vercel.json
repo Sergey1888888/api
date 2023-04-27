@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm start",
+  "buildCommand": "npm run start",
   "installCommand": "npm install",
   "builds": [
     {
